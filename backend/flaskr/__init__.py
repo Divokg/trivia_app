@@ -215,7 +215,26 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
-
+  @app.route('/categories/<int:category_id>/questions')
+  def retrieve_questions_per_category():
+    selection = Question.query.order_by(Question.id).all()
+    current_questions = paginate_questions(request, selection)
+    
+    categories=Category.query.order_by(Category.id).all()
+    
+    current_categories = {}
+    for category in categories:
+      current_categories[category.id] = category.type
+    
+    if len(current_questions) == 0:
+      abort(404)
+    
+    return jsonify({
+      'success': True,
+      'questions': current_questions,
+      'categories': current_categories,
+      'total_questions': len(Question.query.all())
+    })
 
   '''
   @TODO: 
@@ -228,8 +247,96 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
-  
-  @app.route('/quizzes',)
+  '''
+  @app.route('/quizzes',methods=['POST'])
+  def get_quizzes():
+    try:
+      
+      body=request.get_json()
+      quiz_category = body.get('quiz_category', None)
+      quiz_category = quiz_category['type']
+      previous_questions = body.get('previous_questions', None)
+      
+      questions = []
+      if quiz_category == 'click' or quiz_category is None:
+        questions = Question.query.order_by(Question.id).all()
+        
+      else:
+        collection = Category.query.order_by(Category.id).all()
+        categories = [category.format() for category in collection]
+        
+        for category in categories:
+          if (category['type'] == quiz_category):
+            category_id = category['id']
+            
+        questions = Question.query.filter(Question.category == category_id).order_by(Question.id).all()
+        
+        if len(questions) == False:
+          data = {
+            'success': True,
+            'question': False
+          }  
+      
+      questions = [question.format() for question in questions]
+      quiz_number = random.choice(previous_questions, questions) 
+      
+      if quiz_number is not False:
+        qu = questions[quiz_number]
+        quiz_id = qu['id']
+        previous_questions.append(quiz_id)
+        question = questions[quiz_number]
+      else:
+        question = False
+      data = {
+        'success': True,
+        'quiz_category': quiz_category,
+        'previous_questions': previous_questions,
+        'question': question
+      }
+      try:
+        return jsonify(data)
+      except TypeError as te:
+        abort(500)
+    except:
+      abort(400)
+     '''   
+        
+      
+      
+  @app.route('/quizzes',methods=['POST'])
+  def play_quiz():
+    
+    body = request.get_json()
+    category = body.get('quiz_category', None)
+    previous = body.get('previous_questions', None)
+      
+    try:
+      
+      if category['id'] == 0:
+        questions = Question.query.all()
+      else:
+        questions = Question.query.filter(Question.category == category['id']).all()
+        
+      next_question = random.choice(questions)
+      while next_question.id in previous:
+        next_question = random.choice(questions)
+        
+        return jsonify({
+          'success': True,
+          'question': {
+           'id': next_question.id,
+           'question':next_question.question,
+           'answer':next_question.answer,
+           'difficulty': next_question.difficulty,
+           'category': next_question.category
+           },
+         'previous_questions': previous              
+        }),
+        
+        
+    except:
+      abort(422)
+      
 
   '''
   @TODO: 
