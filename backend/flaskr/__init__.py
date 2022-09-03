@@ -247,61 +247,6 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
-  '''
-  @app.route('/quizzes',methods=['POST'])
-  def get_quizzes():
-    try:
-      
-      body=request.get_json()
-      quiz_category = body.get('quiz_category', None)
-      quiz_category = quiz_category['type']
-      previous_questions = body.get('previous_questions', None)
-      
-      questions = []
-      if quiz_category == 'click' or quiz_category is None:
-        questions = Question.query.order_by(Question.id).all()
-        
-      else:
-        collection = Category.query.order_by(Category.id).all()
-        categories = [category.format() for category in collection]
-        
-        for category in categories:
-          if (category['type'] == quiz_category):
-            category_id = category['id']
-            
-        questions = Question.query.filter(Question.category == category_id).order_by(Question.id).all()
-        
-        if len(questions) == False:
-          data = {
-            'success': True,
-            'question': False
-          }  
-      
-      questions = [question.format() for question in questions]
-      quiz_number = random.choice(previous_questions, questions) 
-      
-      if quiz_number is not False:
-        qu = questions[quiz_number]
-        quiz_id = qu['id']
-        previous_questions.append(quiz_id)
-        question = questions[quiz_number]
-      else:
-        question = False
-      data = {
-        'success': True,
-        'quiz_category': quiz_category,
-        'previous_questions': previous_questions,
-        'question': question
-      }
-      try:
-        return jsonify(data)
-      except TypeError as te:
-        abort(500)
-    except:
-      abort(400)
-     '''   
-        
-      
       
   @app.route('/quizzes',methods=['POST'])
   def play_quiz():
