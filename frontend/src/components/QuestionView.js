@@ -93,7 +93,7 @@ class QuestionView extends Component {
         })
       },
       error: (error) => {
-        alert('Unable to load questions. Please try your request again')
+        alert('Unable to load questions. Please try your request againt')
       }
     })
   }
@@ -124,7 +124,8 @@ class QuestionView extends Component {
             {Object.keys(this.state.categories).map((id, ) => (
               <li key={id} onClick={() => {this.getByCategory(id)}}>
                 {this.state.categories[id]}
-                <img className="category" src={`${this.state.categories[id].toLowerCase()}.svg`}/>
+                <img
+                className="category" src={`${this.state.categories[id].toLowerCase()}.svg`}/>
               </li>
             ))}
           </ul>
