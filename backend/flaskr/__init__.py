@@ -1,4 +1,5 @@
 
+from operator import truediv
 import os
 from unicodedata import category
 from flask import Flask, request, abort, jsonify
@@ -114,7 +115,7 @@ def create_app(test_config=None):
   This removal will persist in the database and when you refresh the page. 
   '''
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
-  def delete_question(question_id):
+  def delete(question_id):
     try:
       question = Question.query.filter(Question.id == question_id).one_or_none()
       
@@ -154,20 +155,9 @@ def create_app(test_config=None):
     new_answer = body.get('answer', None)
     new_category = body.get('category', None)
     new_difficulty = body.get('difficulty', None)
-    search = body.get('searchTerm', None)
-    
+   
+        
     try:
-      if search:
-        selection = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search)))
-        current_questions = paginate_questions(request, selection)
-        
-        return jsonify({
-          'success': True,
-           'questions': current_questions,
-           'total_questions': len(selection.all())
-        })
-        
-      else:
        question = Question(question=new_question, answer=new_answer, category= new_category, difficulty=new_difficulty)
        question.insert()
       
@@ -196,13 +186,29 @@ def create_app(test_config=None):
   only question that include that string within their question. 
   Try using the word "title" to start. 
   '''
+  @app.route('/search_questions', methods=['POST'])
+  def search_questions():
+    body = request.get_json()
+    search = body.get('searchTerm', None)
+   
+    try:
+      if search:
+        selection = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search)))
+        current_questions = paginate_questions(request, selection)
+        
+        return jsonify({
+          'success': True,
+          'questions': current_questions,
+          'total_questions': len(selection.all())
+        })
+    except:
+      abort(404)
+      
+      
+    
  
  
  
-  '''
-  /////////////////////COMPLETED ABOVE/////////////////////////
-  '''
-  
   
   
   
@@ -216,26 +222,22 @@ def create_app(test_config=None):
   category to be shown. 
   '''
   @app.route('/categories/<int:category_id>/questions')
-  def retrieve_questions_per_category():
-    selection = Question.query.order_by(Question.id).all()
-    current_questions = paginate_questions(request, selection)
+  def retrieve_questions_per_category(category_id):
+    questions = Question.query.filter(Question.category == category_id)
+    selected_questions = paginate_questions(request, questions)
     
-    categories=Category.query.order_by(Category.id).all()
-    
-    current_categories = {}
-    for category in categories:
-      current_categories[category.id] = category.type
-    
-    if len(current_questions) == 0:
-      abort(404)
-    
+    categories = Category.query.filter(Category.id == category_id)
+    selected_categories = paginate_questions(request, categories)
+   
     return jsonify({
+      'questions' : selected_questions,
       'success': True,
-      'questions': current_questions,
-      'categories': current_categories,
-      'total_questions': len(Question.query.all())
+      'total_questions': len(selected_questions),
+      'current_category':selected_categories
+      
+      
     })
-
+     
   '''
   @TODO: 
   Create a POST endpoint to get questions to play the quiz. 
@@ -247,8 +249,9 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
+  
       
-  @app.route('/quizzes',methods=['POST'])
+  @app.route('/play',methods=['POST'])
   def play_quiz():
     
     body = request.get_json()
