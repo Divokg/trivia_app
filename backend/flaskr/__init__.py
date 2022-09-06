@@ -252,37 +252,25 @@ def create_app(test_config=None):
   
       
   @app.route('/play',methods=['POST'])
-  def play_quiz():
+  def quiz_game():
+    play = request.get_json()
+    previous_questions = play.get('previous_questions')
+    quiz_category = play.get('quiz_category')['id']
     
-    body = request.get_json()
-    category = body.get('quiz_category', None)
-    previous = body.get('previous_questions', None)
-      
     try:
-      
-      if category['id'] == 0:
-        questions = Question.query.all()
+      if quiz_category == 0:
+        questions = Question.query.filter(~Question.id.in_(previous_questions)).all()
       else:
-        questions = Question.query.filter(Question.category == category['id']).all()
-        
-      next_question = random.choice(questions)
-      while next_question.id in previous:
-        next_question = random.choice(questions)
-        
-        return jsonify({
-          'success': True,
-          'question': {
-           'id': next_question.id,
-           'question':next_question.question,
-           'answer':next_question.answer,
-           'difficulty': next_question.difficulty,
-           'category': next_question.category
-           },
-         'previous_questions': previous              
-        }),
-        
-        
-    except:
+        questions = (
+          Question.query.filter(~Question.id.in_(previous_questions)).filter(Question.category == quiz_category).all()    
+        )
+      formatted_questions = [question.format() for question in questions]
+      next_question = (random.choice(formatted_questions)if formatted_questions else None)
+      return jsonify ({
+        'success': True,
+        'question': next_question
+      })
+    except :
       abort(422)
       
 
