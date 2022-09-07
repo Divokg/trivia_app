@@ -166,56 +166,132 @@ The API will return four error types when requests fail:
 --General:
 Creates a new question using the submitted question, answer, difficulty and category. 
 
-curl http://127.0.0.1:5000/questions?page=2 -X POST -H "Content-Type: application/json" -d '{"question":"Who made the first plane", "answer":"The Wright Brothers", "category":"1", "difficulty":"2"}'
+Sample: curl http://127.0.0.1:5000/questions?page=3 -X POST -H "Content-Type: application/json" -d '{"question":"What do you call a group of whales", "answer":"a school", "category":"1", "difficulty":"4"}'
 
 {
-  "created": 38,
+  "created": 44,
   "questions": [
     {
-      "answer": "The Wright Brothers",
-      "category": ,1
-      "difficulty": 2,
-      "id": 38,
-      "question": "Who made the first plane"
+      "answer": "a pod",
+      "category": 1,
+      "difficulty": 3,
+      "id": 43,
+      "question": "What do you call a group of dolphins"
+    },
+    {
+      "answer": "a school",
+      "category": 1,
+      "difficulty": 4,
+      "id": 44,
+      "question": "What do you call a group of whales"
     }
-    ],
-    "created": 38,
+  ],
   "success": true,
-  "total_books": 32
+  "total_questions": 22
 }
 
-
-# DELETE /questions/{question_id}
+# GET /categories
 
 General:
-Deletes the question of the given ID if it exists. Returns the id of the deleted question, success value, total questions, and question list based on current page number to update the frontend.
-curl -X DELETE http://127.0.0.1:5000/questions/4?page=1
+Returns a list of category objects, success value and total number of categories.
 
+Sample: curl http://127.0.0.1:5000/categories
 
 {
-  "deleted": 4,
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "success": true,
+  "total_categories": 6
+}
+
+# DELETE /questions/{id}
+
+General:
+Deletes the question of given {id}. Returns a success value and a list of remaining questions.
+
+Sample: curl -X DELETE http://127.0.0.1:5000/questions/39?page=2
+
+{
+  "deleted": 39,
   "questions": [
     {
-      "answer": "Apollo 13",
-      "category": 5,
-      "difficulty": 4,
-      "id": 2,
-      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
-    },
-    {
-      "answer": "Edward Scissorhands",
-      "category": 5,
+      "answer": "Mona Lisa",
+      "category": 2,
       "difficulty": 3,
-      "id": 6,
-      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+      "id": 17,
+      "question": "La Giaconda is better known as what?"
     },
     {
-      "answer": "Muhammad Ali",
-      "category": 4,
-      "difficulty": 1,
-      "id": 9,
-      "question": "What boxer's original name is Cassius Clay?"
+      "answer": "One",
+      "category": 2,
+      "difficulty": 4,
+      "id": 18,
+      "question": "How many paintings did Van Gogh sell in his lifetime?"
     },
+    {
+      "answer": "Jackson Pollock",
+      "category": 2,
+      "difficulty": 2,
+      "id": 19,
+      "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+    },
+    {
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    },
+    {
+      "answer": "Alexander Fleming",
+      "category": 1,
+      "difficulty": 3,
+      "id": 21,
+      "question": "Who discovered penicillin?"
+    },
+    {
+      "answer": "Scarab",
+      "category": 4,
+      "difficulty": 4,
+      "id": 23,
+      "question": "Which dung beetle was worshipped by the ancient Egyptians?"
+    },
+    {
+      "answer": "pups",
+      "category": 1,
+      "difficulty": 5,
+      "id": 25,
+      "question": "What do you call a baby seal"
+    },
+    {
+      "answer": "The Wright Brothers",
+      "category": 1,
+      "difficulty": 2,
+      "id": 38,
+      "difficulty": 3,
+      "id": 43,
+      "question": "What do you call a group of dolphins"
+    }
+  ],
+  "success": true,
+  "total_questions": 21
+}
+
+# POST /search
+
+General:
+Search for question with the submitted search term. Returns a list of questions that have that search term, success value and total number of questions with that search term.
+
+Sample: curl http://127.0.0.1:5000/search_questions -X POST -H "Content-Type: application/json" -d '{"searchTerm":"which"}'
+
+{
+  "questions": [
     {
       "answer": "Brazil",
       "category": 6,
@@ -228,33 +304,130 @@ curl -X DELETE http://127.0.0.1:5000/questions/4?page=1
       "category": 6,
       "difficulty": 4,
       "id": 11,
-      "question": "Which country won the first ever soccer World Cup in 1930?"     
+      "question": "Which country won the first ever soccer World Cup in 1930?"
     },
     {
-      "answer": "George Washington Carver",
-      "category": 4,
-      "difficulty": 2,
-      "id": 12,
-      "question": "Who invented Peanut Butter?"
+      "answer": "The Palace of Versailles",
+      "category": 3,
+      "difficulty": 3,
+      "id": 14,
+      "question": "In which royal palace would you find the Hall of Mirrors?"
     },
     {
-      "answer": "Lake Victoria",
+      "answer": "Agra",
       "category": 3,
       "difficulty": 2,
-      "id": 13,
-      "question": "What is the largest lake in Africa?"
+      "id": 15,
+      "question": "The Taj Mahal is located in which Indian city?"
     },
+    {
+      "answer": "Escher",
       "category": 2,
       "difficulty": 1,
       "id": 16,
       "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
+    },
+    {
+      "answer": "Jackson Pollock",
+      "question": "Which dung beetle was worshipped by the ancient Egyptians?"
     }
   ],
   "success": true,
-  "total_questions": 31
+  "total_questions": 7
 }
 
+# GET /categories/{id}/questions
 
+General:
+Returns a list of questions in the given category per the input ID, success value and total questions of the given category.
+
+Sample: curl http://127.0.0.1:5000/categories/1/questions
+
+{
+  "current_category": [
+    {
+      "id": 1,
+      "type": "Science"
+    }
+  ],
+  "questions": [
+    {
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    },
+    {
+      "answer": "Alexander Fleming",
+      "category": 1,
+      "difficulty": 3,
+      "id": 21,
+      "question": "Who discovered penicillin?"
+    },
+    {
+      "answer": "pups",
+      "category": 1,
+      "difficulty": 5,
+      "id": 25,
+      "question": "What do you call a baby seal"
+    },
+    {
+      "answer": "The Wright Brothers",
+      "category": 1,
+      "difficulty": 2,
+      "id": 38,
+      "question": "Who made the first plane"
+    },
+    {
+      "answer": "blue",
+      "category": 1,
+      "difficulty": 1,
+      "id": 42,
+      "question": "What is the color of the ocean"
+    },
+    {
+      "answer": "a pod",
+      "category": 1,
+      "difficulty": 3,
+      "id": 43,
+      "question": "What do you call a group of dolphins"
+    },
+    {
+      "answer": "a school",
+      "category": 1,
+      "difficulty": 4,
+      "id": 44,
+      "question": "What do you call a group of whales"
+    },
+    {
+      "answer": "mercury",
+      "category": 1,
+      "difficulty": 5,
+      "id": 45,
+      "question": "What is the nearest planet to the sun?"
+    }
+  ],
+  "success": true,
+  "total_questions": 8
+}
+
+# POST /play
+
+General: Receives the categorytype and the previous question. Returns the next question in the same type category. 
+
+Sample: curl http://127.0.0.1:5000/play -X POST -H "Content-Type: application/json" -d '{"quiz_category":{"type":"Science","id":"1"}, "previous_questions":[42]}'
+
+{
+  "question": {
+    "answer": "pups",
+    "category": 1,
+    "difficulty": 5,
+    "id": 25,
+    "question": "What do you call a baby seal"
+  },
+  "success": true
+}
 # Authors
 
 Samuel Ndungu Njoroge

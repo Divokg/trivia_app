@@ -253,19 +253,18 @@ def create_app(test_config=None):
       
   @app.route('/play',methods=['POST'])
   def quiz_game():
-    play = request.get_json()
-    previous_questions = play.get('previous_questions')
-    quiz_category = play.get('quiz_category')['id']
-    
+    play_body = request.get_json()
+    play_category = play_body.get('quiz_category')['id']
+    play_previous = play_body.get('previous_questions')
     try:
-      if quiz_category == 0:
-        questions = Question.query.filter(~Question.id.in_(previous_questions)).all()
+      if play_category == 0:
+        questions = Question.query.all()
       else:
         questions = (
-          Question.query.filter(~Question.id.in_(previous_questions)).filter(Question.category == quiz_category).all()    
+          Question.query.filter(~Question.id.in_(play_previous)).filter(Question.category == play_category).all()    
         )
-      formatted_questions = [question.format() for question in questions]
-      next_question = (random.choice(formatted_questions)if formatted_questions else None)
+      play_questions = [question.format() for question in questions]
+      next_question = (random.choice(play_questions)if play_questions else None)
       return jsonify ({
         'success': True,
         'question': next_question
