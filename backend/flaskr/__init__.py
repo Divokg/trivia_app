@@ -123,14 +123,16 @@ def create_app(test_config=None):
         abort(404)
         
       question.delete()
-      selection = Question.query.order_by(Question.id).all()
-      current_questions = paginate_questions(request, selection)
+      questions = Question.query.order_by(Question.id).all()
+      all_questions = paginate_questions(request, questions)
       
       return jsonify({
         'success': True,
+        'total_questions': len(Question.query.all()),
+        'questions': all_questions,
         'deleted': question_id,
-        'questions': current_questions,
-        'total_questions': len(Question.query.all())
+        'questions': all_questions,
+        
       })
     
     except:

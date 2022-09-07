@@ -215,10 +215,10 @@ Sample: curl http://127.0.0.1:5000/categories
 General:
 Deletes the question of given {id}. Returns a success value and a list of remaining questions.
 
-Sample: curl -X DELETE http://127.0.0.1:5000/questions/39?page=2
+Sample: curl -X DELETE http://127.0.0.1:5000/questions/23?page=2
 
 {
-  "deleted": 39,
+  "deleted": 23,
   "questions": [
     {
       "answer": "Mona Lisa",
@@ -256,13 +256,6 @@ Sample: curl -X DELETE http://127.0.0.1:5000/questions/39?page=2
       "question": "Who discovered penicillin?"
     },
     {
-      "answer": "Scarab",
-      "category": 4,
-      "difficulty": 4,
-      "id": 23,
-      "question": "Which dung beetle was worshipped by the ancient Egyptians?"
-    },
-    {
       "answer": "pups",
       "category": 1,
       "difficulty": 5,
@@ -274,13 +267,32 @@ Sample: curl -X DELETE http://127.0.0.1:5000/questions/39?page=2
       "category": 1,
       "difficulty": 2,
       "id": 38,
+      "question": "Who made the first plane"
+    },
+    {
+      "answer": "blue",
+      "category": 1,
+      "difficulty": 1,
+      "id": 42,
+      "question": "What is the color of the ocean"
+    },
+    {
+      "answer": "a pod",
+      "category": 1,
       "difficulty": 3,
       "id": 43,
       "question": "What do you call a group of dolphins"
+    },
+    {
+      "answer": "mercury",
+      "category": 1,
+      "difficulty": 5,
+      "id": 45,
+      "question": "What is the nearest planet to the sun?"
     }
   ],
   "success": true,
-  "total_questions": 21
+  "total_questions": 20
 }
 
 # POST /search
