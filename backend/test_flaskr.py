@@ -66,32 +66,19 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'resource not found')
         
-    def test_get_paginated_categories(self):
-        response = self.client().get('/categories')
-        data = json.loads(response.data)
+    
         
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertTrue(data['total_categories'])
-        self.assertTrue(len(data['categories']))
-        
-    def test_404_sent_requesting_beyond_valid_categories_page(self):
-        response = self.client().get('/categories?page=1000', json={'rating':1})
-        data = json.loads(response.data)
-        
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'resource not found')
+    
         
     def test_delete_question(self):
-        response = self.client().delete('/questions/24')
+        response = self.client().delete('/questions/26')
         data = json.loads(response.data)
         
-        question = Question.query.filter(Question.id == 24).one_or_none()
+        question = Question.query.filter(Question.id == 26).one_or_none()
         
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted'], 24)
+        self.assertEqual(data['deleted'], 26)
         self.assertTrue(data['total_questions'])
         self.assertTrue(len(data['questions']))
         self.assertEqual(question, None)
@@ -129,7 +116,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_questions'])
-        self.assertEqual(len(data['questions']), 6)
+        self.assertEqual(len(data['questions']), 7)
         
     def test_get_question_search_without_results(self):
         response = self.client().post('/questions', json={'search': 'gjgkgsxdfth'})
