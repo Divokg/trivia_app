@@ -65,6 +65,7 @@ The API will return four error types when requests fail:
  400: Bad Request
  422: Not Processable
  405: Method not allowed
+ 500: Server error
 
 
  ## Endpoints
@@ -352,15 +353,15 @@ Sample: curl http://127.0.0.1:5000/categories/1/questions
 
 General: Receives the categorytype and the previous question. Returns the next question in the same type category. 
 
-Sample: curl http://127.0.0.1:5000/play -X POST -H "Content-Type: application/json" -d '{"quiz_category":{"type":"Science","id":"1"}, "previous_questions":[42]}'
+Sample: curl http://127.0.0.1:5000/play -X POST -H "Content-Type: application/json" -d '{"quiz_category":{"id":"1"}, "previous_questions":[42,26]}'
 
 {
   "question": {
-    "answer": "pups",
+    "answer": "The Liver",
     "category": 1,
-    "difficulty": 5,
-    "id": 25,
-    "question": "What do you call a baby seal"
+    "difficulty": 4,
+    "id": 20,
+    "question": "What is the heaviest organ in the human body?"
   },
   "success": true
 }
