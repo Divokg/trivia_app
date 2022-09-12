@@ -166,28 +166,18 @@ The API will return four error types when requests fail:
 --General:
 Creates a new question using the submitted question, answer, difficulty and category. 
 
-Sample: curl http://127.0.0.1:5000/questions?page=3 -X POST -H "Content-Type: application/json" -d '{"question":"What do you call a group of whales", "answer":"a school", "category":"1", "difficulty":"4"}'
+Sample: curl http://127.0.0.1:5000/add_question -X POST -H "Content-Type: application/json" -d '{"question":"As black as ?", "answer":"coal", "category":"1", "difficulty":"2"}'
 
 {
-  "created": 44,
-  "questions": [
-    {
-      "answer": "a pod",
-      "category": 1,
-      "difficulty": 3,
-      "id": 43,
-      "question": "What do you call a group of dolphins"
-    },
-    {
-      "answer": "a school",
-      "category": 1,
-      "difficulty": 4,
-      "id": 44,
-      "question": "What do you call a group of whales"
-    }
-  ],
-  "success": true,
-  "total_questions": 22
+  "created": 31,
+  "question": {
+    "answer": "coal",
+    "category": 1,
+    "difficulty": 2,
+    "id": 31,
+    "question": "As black as ?"
+  },
+  "success": true
 }
 
 # GET /categories
@@ -215,84 +205,18 @@ Sample: curl http://127.0.0.1:5000/categories
 General:
 Deletes the question of given {id}. Returns a success value and a list of remaining questions.
 
-Sample: curl -X DELETE http://127.0.0.1:5000/questions/23?page=2
+Sample: curl -X DELETE http://127.0.0.1:5000/questions/12
 
 {
-  "deleted": 23,
-  "questions": [
-    {
-      "answer": "Mona Lisa",
-      "category": 2,
-      "difficulty": 3,
-      "id": 17,
-      "question": "La Giaconda is better known as what?"
-    },
-    {
-      "answer": "One",
-      "category": 2,
-      "difficulty": 4,
-      "id": 18,
-      "question": "How many paintings did Van Gogh sell in his lifetime?"
-    },
-    {
-      "answer": "Jackson Pollock",
-      "category": 2,
-      "difficulty": 2,
-      "id": 19,
-      "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
-    },
-    {
-      "answer": "The Liver",
-      "category": 1,
-      "difficulty": 4,
-      "id": 20,
-      "question": "What is the heaviest organ in the human body?"
-    },
-    {
-      "answer": "Alexander Fleming",
-      "category": 1,
-      "difficulty": 3,
-      "id": 21,
-      "question": "Who discovered penicillin?"
-    },
-    {
-      "answer": "pups",
-      "category": 1,
-      "difficulty": 5,
-      "id": 25,
-      "question": "What do you call a baby seal"
-    },
-    {
-      "answer": "The Wright Brothers",
-      "category": 1,
-      "difficulty": 2,
-      "id": 38,
-      "question": "Who made the first plane"
-    },
-    {
-      "answer": "blue",
-      "category": 1,
-      "difficulty": 1,
-      "id": 42,
-      "question": "What is the color of the ocean"
-    },
-    {
-      "answer": "a pod",
-      "category": 1,
-      "difficulty": 3,
-      "id": 43,
-      "question": "What do you call a group of dolphins"
-    },
-    {
-      "answer": "mercury",
-      "category": 1,
-      "difficulty": 5,
-      "id": 45,
-      "question": "What is the nearest planet to the sun?"
-    }
-  ],
-  "success": true,
-  "total_questions": 20
+  "deleted": 12,
+  "question deleted": {
+    "answer": "George Washington Carver",
+    "category": 4,
+    "difficulty": 2,
+    "id": 12,
+    "question": "Who invented Peanut Butter?"
+  },
+  "success": true
 }
 
 # POST /search

@@ -17,6 +17,7 @@ DB_PATH = 'postgresql+psycopg2://{}:{}@{}/{}'.format(DB_USER, DB_PASSWORD, DB_HO
 db = SQLAlchemy()
 
 
+
 '''
 setup_db(app)
     binds a flask application and a SQLAlchemy service
@@ -27,6 +28,8 @@ def setup_db(app, DB_PATH=DB_PATH):
     db.app = app
     db.init_app(app)
     db.create_all()
+   
+    
  
 
 '''
